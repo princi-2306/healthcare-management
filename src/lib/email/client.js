@@ -1,14 +1,20 @@
 import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "smtp.gmail.com",
-  port: parseInt(process.env.SMTP_PORT || "587"),
-  secure: process.env.SMTP_SECURE === "true",
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+function getTransporter() {
+  const host = process.env.SMTP_HOST || "smtp.gmail.com";
+  const port = parseInt(process.env.SMTP_PORT || "465");
+  const secure = process.env.SMTP_SECURE !== "false" || port === 465;
+
+  return nodemailer.createTransport({
+    host,
+    port,
+    secure,
+    auth: process.env.SMTP_USER && process.env.SMTP_PASS ? {
+      user: process.env.SMTP_USER.trim(),
+      pass: process.env.SMTP_PASS.trim(),
+    } : undefined,
+  });
+}
 
 /**
  * Send an email using the configured transporter
@@ -21,8 +27,11 @@ export async function sendEmail({
   attachments = undefined,
   icalEvent = undefined,
 }) {
+  const rawFrom = process.env.EMAIL_FROM || process.env.SMTP_USER || "204.priyanshi@gmail.com";
+  const cleanFrom = rawFrom.replace(/^["']|["']$/g, "").trim();
+
   const mailOptions = {
-    from: process.env.EMAIL_FROM || "Healthcare Platform <noreply@healthcare.app>",
+    from: cleanFrom,
     to,
     subject,
     html,
@@ -32,7 +41,7 @@ export async function sendEmail({
   };
 
   try {
-    const info = await transporter.sendMail(mailOptions);
+    const info = await getTransporter().sendMail(mailOptions);
     return {
       success: true,
       messageId: info.messageId,
@@ -51,7 +60,7 @@ export async function sendEmail({
  */
 export async function verifyConnection() {
   try {
-    await transporter.verify();
+    await getTransporter().verify();
     return true;
   } catch (error) {
     console.error("SMTP connection verification failed:", error);
@@ -59,4 +68,4 @@ export async function verifyConnection() {
   }
 }
 
-export default transporter;
+export default getTransporter;

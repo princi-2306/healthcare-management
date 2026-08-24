@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Calendar, Clock, User, Sparkles } from "lucide-react";
+import { ArrowLeft, Calendar, User } from "lucide-react";
 import { format } from "date-fns";
 
 export default function DoctorAppointmentDetailPage() {
@@ -18,7 +18,7 @@ export default function DoctorAppointmentDetailPage() {
 
   const [appointment, setAppointment] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isGenerating, setIsGenerating] = useState(false);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -42,7 +42,6 @@ export default function DoctorAppointmentDetailPage() {
   }, [appointmentId]);
 
   const generatePreVisitSummary = async () => {
-    setIsGenerating(true);
     try {
       const res = await fetch(
         `/api/appointments/${appointmentId}/pre-visit-summary`,
@@ -60,8 +59,6 @@ export default function DoctorAppointmentDetailPage() {
       }
     } catch (err) {
       console.error("Failed to generate summary:", err);
-    } finally {
-      setIsGenerating(false);
     }
   };
 

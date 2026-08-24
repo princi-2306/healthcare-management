@@ -9,9 +9,11 @@ export const PRE_VISIT_FALLBACK = {
   chiefComplaintSummary:
     "AI summary unavailable. Please review the patient's symptom form directly.",
   suggestedQuestions: [
-    "Could you describe your symptoms in more detail?",
-    "When did you first notice these symptoms?",
-    "Have you experienced anything similar before?",
+    "What could be causing my symptoms?",
+    "Are there any tests or evaluations I should consider?",
+    "What treatment options are available for my condition?",
+    "Are there any warning signs I should watch for?",
+    "What are the recommended next steps for my care?",
   ],
   relevantHistory:
     "AI summary unavailable. Please review the patient's medical history in their profile.",

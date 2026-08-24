@@ -14,6 +14,7 @@ import {
   Pill,
   ArrowLeft,
   AlertCircle,
+  CheckCircle2,
 } from "lucide-react";
 import { format } from "date-fns";
 import { PatientSummaryCard } from "@/components/patient/patient-summary-card";
@@ -162,9 +163,9 @@ export default function AppointmentDetailPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Button variant="outline" className="gap-2 text-sky-700 border-sky-200 hover:bg-sky-50">
-                      <Calendar className="h-4 w-4 text-sky-600" />
-                      Add to Google Calendar
+                    <Button variant="outline" className="gap-2 text-emerald-700 border-emerald-200 bg-emerald-50 hover:bg-emerald-100">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                      Added to Google Calendar
                     </Button>
                   </a>
                 )}
@@ -181,6 +182,8 @@ export default function AppointmentDetailPage() {
           )}
         </CardContent>
       </Card>
+
+
 
       {/* Symptom Form */}
       {appointment.symptomForm?.chiefComplaint && (

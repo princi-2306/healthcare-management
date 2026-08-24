@@ -16,8 +16,11 @@ const NotificationLogSchema = new mongoose.Schema(
       type: String,
       enum: [
         "booking-confirmation",
+        "doctor-booking-notification",
         "cancellation",
+        "doctor-cancellation-notification",
         "reminder",
+        "doctor-reminder",
         "reschedule",
         "medication-reminder",
         "follow-up",

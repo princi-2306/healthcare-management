@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Clock, User, ExternalLink } from "lucide-react";
+import { Clock, User, ExternalLink, CheckCircle2 } from "lucide-react";
 import { format } from "date-fns";
 
 interface ScheduleItem {
@@ -115,10 +115,11 @@ export function ScheduleList({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="text-xs text-sky-600 hover:text-sky-800 p-1 rounded hover:bg-sky-50 transition-colors flex items-center gap-1"
-                title="Add to Google Calendar"
+                className="text-xs text-emerald-600 hover:text-emerald-800 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-1 rounded-md border border-emerald-200/60 transition-colors flex items-center gap-1 font-medium shrink-0"
+                title="View on Google Calendar"
               >
-                <ExternalLink className="h-4 w-4" />
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                Added to Google Calendar
               </a>
             </div>
           </CardContent>

@@ -9,7 +9,9 @@ import { AlertCircle, MessageSquare, FileText, History } from "lucide-react";
 interface PreVisitSummaryCardProps {
   summary: {
     urgencyLevel?: "low" | "medium" | "high" | "critical" | "";
+    descriptiveSummary?: string;
     chiefComplaintSummary?: string;
+    patientSummary?: string;
     suggestedQuestions?: string[];
     relevantHistory?: string;
     keyObservations?: string;
@@ -30,23 +32,63 @@ export function PreVisitSummaryCard({
 }: PreVisitSummaryCardProps) {
   let parsedSummary: any = summary || {};
 
+  // Parse string summary
   if (typeof summary === "string") {
     try {
       parsedSummary = JSON.parse(summary);
     } catch {
-      parsedSummary = { chiefComplaintSummary: summary };
+      parsedSummary = { descriptiveSummary: summary };
     }
   }
 
-  const isGenerated = !!(parsedSummary.generatedAt || parsedSummary.urgencyLevel || parsedSummary.chiefComplaintSummary);
+  // If rawLlmResponse exists, parse it to extract structured fields
+  if (parsedSummary?.rawLlmResponse && typeof parsedSummary.rawLlmResponse === "string") {
+    try {
+      const fromRaw = JSON.parse(parsedSummary.rawLlmResponse);
+      // Merge LLM fields into parsedSummary (don't overwrite existing fields like generatedAt)
+      if (fromRaw.descriptiveSummary) parsedSummary.descriptiveSummary = fromRaw.descriptiveSummary;
+      if (fromRaw.chiefComplaintSummary) parsedSummary.chiefComplaintSummary = fromRaw.chiefComplaintSummary;
+      if (fromRaw.patientSummary) parsedSummary.patientSummary = fromRaw.patientSummary;
+      if (fromRaw.urgencyLevel) parsedSummary.urgencyLevel = fromRaw.urgencyLevel.toLowerCase();
+      if (fromRaw.suggestedQuestions) parsedSummary.suggestedQuestions = fromRaw.suggestedQuestions;
+      if (fromRaw.missingInformation) parsedSummary.missingInformation = fromRaw.missingInformation;
+    } catch {
+      // rawLlmResponse might be truncated or invalid — try to extract text
+    }
+  }
 
-  // Clean any residual key labels if present in string text
+  const isGenerated = !!(
+    parsedSummary.generatedAt ||
+    parsedSummary.urgencyLevel ||
+    parsedSummary.descriptiveSummary ||
+    parsedSummary.chiefComplaintSummary ||
+    parsedSummary.patientSummary
+  );
+
+  // Extract clean text from a value that might be raw JSON or a plain string
   const cleanText = (text?: string) => {
     if (!text) return "";
-    return text.replace(/^"?(Key Observations|Chief Complaint|Summary)"?:\s*"?/i, "").replace(/"$/, "").trim();
+    let str = String(text).trim();
+    // If the text looks like JSON, try to extract the descriptive field from it
+    if (str.startsWith("{")) {
+      try {
+        const obj = JSON.parse(str);
+        return obj.descriptiveSummary || obj.chiefComplaintSummary || obj.patientSummary || "";
+      } catch {
+        // Might be truncated JSON — extract the value after the first key
+        const match = str.match(/"(?:descriptiveSummary|chiefComplaintSummary|patientSummary)"\s*:\s*"([^"]*)/);
+        if (match) return match[1];
+      }
+    }
+    return str.replace(/^"?(Key Observations|Chief Complaint|Summary|descriptiveSummary)"?:\s*"?/i, "").replace(/"$/, "").trim();
   };
 
-  const complaintText = cleanText(parsedSummary.chiefComplaintSummary) || symptomForm?.chiefComplaint || "Not provided";
+  const complaintText =
+    cleanText(parsedSummary.descriptiveSummary) ||
+    cleanText(parsedSummary.chiefComplaintSummary) ||
+    cleanText(parsedSummary.patientSummary) ||
+    symptomForm?.chiefComplaint ||
+    "Not provided";
   const historyText = cleanText(parsedSummary.relevantHistory);
 
   return (

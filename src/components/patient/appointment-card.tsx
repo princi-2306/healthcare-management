@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Calendar, Clock, User, ChevronRight, ExternalLink } from "lucide-react";
+import { Calendar, Clock, User, ChevronRight, ExternalLink, CheckCircle2 } from "lucide-react";
 import { format } from "date-fns";
 
 interface AppointmentCardProps {
@@ -117,10 +117,10 @@ export function AppointmentCard({
                     href={getGoogleCalendarUrl()}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-xs text-sky-600 hover:text-sky-700 dark:text-sky-400 font-medium"
+                    className="inline-flex items-center gap-1.5 text-xs text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 font-medium bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-md border border-emerald-200/60"
                   >
-                    <ExternalLink className="h-3 w-3" />
-                    Add to Google Calendar
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                    Added to Google Calendar
                   </a>
                 </div>
               )}

@@ -361,10 +361,11 @@ export function AppointmentCalendar({
                         href={googleCalUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs text-sky-600 hover:text-sky-700 dark:text-sky-400 font-medium"
+                        className="inline-flex items-center gap-1.5 text-xs text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 font-medium bg-emerald-50 dark:bg-emerald-950/40 px-2 py-1 rounded-md border border-emerald-200/60"
+                        title="View or manage on Google Calendar"
                       >
-                        <ExternalLink className="h-3.5 w-3.5" />
-                        Add to Google Calendar
+                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                        Added to Google Calendar
                       </a>
 
                       <Link href={detailHref}>

@@ -159,10 +159,20 @@ export function PostVisitForm({
                         placeholder="Dosage (e.g., 500mg)"
                         {...register(`prescription.${index}.dosage`)}
                       />
-                      <Input
-                        placeholder="Frequency (e.g., twice daily)"
-                        {...register(`prescription.${index}.frequency`)}
-                      />
+                      <div className="space-y-1">
+                        <select
+                          className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                          {...register(`prescription.${index}.frequency`)}
+                        >
+                          <option value="">Select Frequency *</option>
+                          <option value="once daily">Once Daily / Once a Day</option>
+                          <option value="twice daily">Twice Daily / Twice a Day</option>
+                          <option value="three times daily">Three Times Daily</option>
+                          <option value="four times daily">Four Times Daily</option>
+                          <option value="every morning">Every Morning</option>
+                          <option value="every night">Every Night / At Bedtime</option>
+                        </select>
+                      </div>
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <Input
